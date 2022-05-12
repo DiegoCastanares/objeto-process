@@ -6,6 +6,8 @@ import passport from "passport";
 import User from "./models/User.js";
 import bcrypt from "bcrypt";
 import MongoStore from "connect-mongo";
+import "dotenv/config";
+import { fork } from "child_process";
 import { Strategy as LocalStrategy } from "passport-local";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
@@ -29,8 +31,7 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
 // Connecting MongoDB
-const URL =
-  "mongodb+srv://Diego:123@codercluster18335.oxenh.mongodb.net/passportDB?retryWrites=true&w=majority";
+const URL = process.env.MONGODB;
 mongoose.connect(
   URL,
   {
@@ -48,11 +49,10 @@ const tenMins = 60 * 10;
 app.use(
   session({
     store: MongoStore.create({
-      mongoUrl:
-        "mongodb+srv://Diego:123@codercluster18335.oxenh.mongodb.net/passportDB?retryWrites=true&w=majority",
+      mongoUrl: URL,
       ttl: tenMins,
     }),
-    secret: "claveSecreta",
+    secret: process.env.MONGODB_SECRET,
     resave: true,
     saveUninitialized: true,
   })
@@ -143,6 +143,30 @@ const isAuth = (req, res, next) => {
   }
 };
 
+let comandos = [
+  {
+    name: process.platform,
+  },
+  {
+    name: process.memoryUsage.rss(),
+  },
+  {
+    name: process.version,
+  },
+  {
+    name: process.pid,
+  },
+  {
+    name: process.cwd(),
+  },
+  {
+    name: process.argv,
+  },
+  {
+    name: process.title,
+  },
+];
+
 // ROUTES
 app.get("/", (req, res) => {
   res.render("home");
@@ -166,6 +190,26 @@ app.get("/perfil", isAuth, (req, res) => {
 
 app.get("/logout", isAuth, (req, res) => {
   res.render("logout");
+});
+
+app.get("/info", (req, res) => {
+  res.render("info", {
+    comandos: comandos,
+  });
+});
+
+const child = fork("./src/child.js");
+app.get("/api/randoms", (req, res) => {
+  let number;
+  if (req.query.cant) {
+    number = req.query.cant;
+  } else {
+    number = 100000000;
+  }
+  child.send(number);
+  child.on("message", (msg) => {
+    res.send(msg);
+  });
 });
 
 app.post(

@@ -1,5 +1,5 @@
 {
-  "name": "InicioDeSesion",
+  "name": "objetoprocessmaster",
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
@@ -19,6 +19,7 @@
     "express-session": "^1.17.2",
     "mongoose": "^6.3.1",
     "passport": "^0.5.2",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "dotenv": "^16.0.0"
   }
 }
