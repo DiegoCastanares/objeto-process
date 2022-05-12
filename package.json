@@ -10,7 +10,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "connect-mongo": "^4.6.0",
@@ -21,5 +20,15 @@
     "passport": "^0.5.2",
     "passport-local": "^1.0.0",
     "dotenv": "^16.0.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DiegoCastanares/desafioIniciodeSesion.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DiegoCastanares/desafioIniciodeSesion/issues"
+  },
+  "homepage": "https://github.com/DiegoCastanares/desafioIniciodeSesion#readme",
+  "description": ""
 }
